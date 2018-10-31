@@ -18,6 +18,12 @@ STATIC_DCL const char *NDECL(rank);
 STATIC_DCL void NDECL(bot1);
 STATIC_DCL void NDECL(bot2);
 
+STATIC_OVL char
+exerchar(int i)
+{
+  return i == 0 ? '_' : sgn(i) == -1? '-' : '+';
+}
+
 STATIC_OVL void
 bot1()
 {
@@ -53,15 +59,18 @@ bot1()
         Sprintf(nb = eos(nb), "%*s", i - j, " "); /* pad with spaces */
     if (ACURR(A_STR) > 18) {
         if (ACURR(A_STR) > STR18(100))
-            Sprintf(nb = eos(nb), "St:%2d ", ACURR(A_STR) - 100);
+            Sprintf(nb = eos(nb), "St:%2d%c", ACURR(A_STR) - 100, exerchar(AEXE(A_STR)));
         else if (ACURR(A_STR) < STR18(100))
-            Sprintf(nb = eos(nb), "St:18/%02d ", ACURR(A_STR) - 18);
+            Sprintf(nb = eos(nb), "St:18/%02d%c", ACURR(A_STR) - 18, exerchar(AEXE(A_STR)));
         else
             Sprintf(nb = eos(nb), "St:18/** ");
     } else
-        Sprintf(nb = eos(nb), "St:%-1d ", ACURR(A_STR));
-    Sprintf(nb = eos(nb), "Dx:%-1d Co:%-1d In:%-1d Wi:%-1d Ch:%-1d",
-            ACURR(A_DEX), ACURR(A_CON), ACURR(A_INT), ACURR(A_WIS),
+        Sprintf(nb = eos(nb), "St:%-1d%c", ACURR(A_STR), exerchar(AEXE(A_STR)));
+    Sprintf(nb = eos(nb), "Dx:%-1d%cCo:%-1d%cIn:%-1d%cWi:%-1d%cCh:%-1d",
+            ACURR(A_DEX), exerchar(AEXE(A_DEX)),
+            ACURR(A_CON), exerchar(AEXE(A_CON)),
+            ACURR(A_INT), exerchar(AEXE(A_INT)),
+            ACURR(A_WIS), exerchar(AEXE(A_WIS)),
             ACURR(A_CHA));
     Sprintf(nb = eos(nb),
             (u.ualign.type == A_CHAOTIC)
